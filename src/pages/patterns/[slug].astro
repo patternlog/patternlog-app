@@ -1,0 +1,124 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import type { Pattern } from "../../content.config";
+import Layout from "../_layout.astro";
+
+export async function getStaticPaths() {
+  const patterns = await getCollection("patterns");
+  return patterns.map((pattern: Pattern) => ({
+    params: { slug: pattern.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+
+const entry = await getEntry("patterns", slug);
+if (!entry) {
+  throw new Error(`No pattern found for slug: ${slug}`);
+}
+
+const { data: pattern, body } = entry;
+---
+
+<Layout>
+  <a
+    href="/"
+    class="text-blue-600 hover:underline"
+    >&larr; Back to catalog</a
+  >
+  <h1 class="text-3xl font-bold mt-4">{pattern.title}</h1>
+  <p class="text-gray-600 mb-4">By {pattern.designer}</p>
+
+  {
+    pattern.lineArt && (
+      <img
+        src={`/api/file/${pattern.folder}/${pattern.lineArt}`}
+        alt={`${pattern.title} technical drawing`}
+        width="200"
+      />
+    )
+  }
+
+  {pattern.description && <p class="mb-6">{pattern.description}</p>}
+
+  {
+    pattern.requiredFabric && (
+      <section class="mb-6">
+        <h2 class="text-xl font-semibold mb-2">Required Fabric</h2>
+        <p>{pattern.requiredFabric}</p>
+      </section>
+    )
+  }
+
+  {
+    pattern.sizes?.length && (
+      <section class="mb-6">
+        <h2 class="text-xl font-semibold mb-2">Available Sizes</h2>
+        <ul class="list-disc pl-6">
+          {pattern.sizes.map((s: string) => (
+            <li>{s}</li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    pattern.samples?.length && (
+      <section class="mb-6">
+        <h2 class="text-xl font-semibold mb-2">Sample Images</h2>
+        <div class="grid grid-cols-8 gap-2">
+          {pattern.samples.map((img: string) => (
+            <img
+              src={`/api/file/${pattern.folder}/${img}`}
+              alt={`${pattern.title} sample`}
+              class="rounded-lg shadow size-20 object-cover"
+            />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  {
+    pattern.instructions?.length && (
+      <section class="mb-6">
+        <h2 class="text-xl font-semibold mb-2">Instructions</h2>
+        <ul class="list-disc pl-6">
+          {pattern.instructions.map((file: string) => (
+            <li>
+              <a
+                href={`/api/file/${pattern.designer} - ${pattern.title}/${file}`}
+                class="text-blue-600 hover:underline"
+                target="_blank"
+              >
+                {file}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    pattern.patternFiles?.length && (
+      <section class="mb-6">
+        <h2 class="text-xl font-semibold mb-2">Pattern Files</h2>
+        <ul class="list-disc pl-6">
+          {pattern.patternFiles.map((file: string) => (
+            <li>
+              <a
+                href={`/api/file/${pattern.designer} - ${pattern.title}/${file}`}
+                class="text-blue-600 hover:underline"
+                target="_blank"
+              >
+                {file}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+</Layout>

@@ -1,16 +1,22 @@
 ---
+import { getCollection } from "astro:content";
+import type { Pattern } from "../content.config";
 
+import Layout from "./_layout.astro";
+import PatternCard from "../components/PatternCard";
+import FilterBar from "../components/FilterBar";
+import SearchInput from "../components/SearchInput";
+
+const patterns = await getCollection("patterns");
+
+let search = Astro.url.searchParams.get("q") || "";
+let filtered = patterns.filter((p: Pattern) => p.data.title.toLowerCase().includes(search.toLowerCase()));
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout>
+  <SearchInput />
+  <FilterBar />
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+    {filtered.map((p: Pattern) => <PatternCard pattern={p} />)}
+  </div>
+</Layout>

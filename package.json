@@ -1,14 +1,27 @@
 {
-  "name": "",
+  "name": "patternlog",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "generate-meta": "ts-node ./src/scripts/generate-meta.ts"
   },
   "dependencies": {
-    "astro": "^5.14.5"
+    "@astrojs/react": "^4.4.0",
+    "@tailwindcss/vite": "^4.1.14",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "astro": "^5.14.5",
+    "js-yaml": "^4.1.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tailwindcss": "^4.1.14",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9"
   }
 }
