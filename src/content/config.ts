@@ -42,8 +42,10 @@ const patterns = defineCollection({
       .optional(),
     includesCupSizing: z.boolean(),
     requiredFabricType: z.array(z.enum(["Webware", "Strick"])).optional(),
+    requiredFabric: z.array(z.enum(["French Terry", "Popeline", "Powernet"])).optional(),
     tags: z.array(z.string()),
     description: z.string().optional(),
+    language: z.enum(["en", "de"]),
     // files
     folder: z.string(),
     lineArt: z.string().optional(),
@@ -51,7 +53,6 @@ const patterns = defineCollection({
     instructions: z.array(z.string()).optional(),
     samples: z.array(z.string()).optional(),
     videos: z.array(z.string()).optional(),
-    language: z.enum(["en", "de"]),
   }),
 });
 
