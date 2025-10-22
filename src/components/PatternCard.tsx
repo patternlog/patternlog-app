@@ -1,5 +1,5 @@
 import type { JSX } from "react";
-import type { Pattern } from "../content.config";
+import type { Pattern } from "../content/config";
 
 export default function PatternCard({ pattern }: Pattern): JSX.Element {
   return (
